@@ -17,7 +17,7 @@ import Util
 def get_sqls():
     sqls = []
     # Example:
-    # sqls += get_str_allpairs(
+    # sqls += Util.get_str_allpairs(
     #     "SELECT * FROM \"%s\" WHERE col1 = %d;",
     #     [["T0", "T1"], [0, 1]],
     # )[:]  # Add to sqls in flat manner

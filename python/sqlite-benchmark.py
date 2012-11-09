@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import __init__
+print(__init__.basedir)
 import time
 import Config
 import Util
