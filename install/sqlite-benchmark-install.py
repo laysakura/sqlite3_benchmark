@@ -32,7 +32,7 @@ def create_dirs():
             dir_list.append(rel_search_path)
 
     # create directories
-    [os.mkdir(d) for d in dir_list]
+    [os.mkdir(d) for d in dir_list if not os.path.exists(d)]
 
 
 def install_template_files():
@@ -67,16 +67,19 @@ def install_scripts():
 
 
 def check_env():
+    n_template_files = 0
     for template_file in template_files:
         if not os.path.exists(template_file):
-            print(
+            n_template_files += 1
+    if n_template_files < len(template_files) / 2:
+        print(
 """
 This directory does not seem to be an sqlite-benchmark directory.
-(%s does not exist)
+(Too few template files exist)
 Use this command in empty directory or sqlite-benchmark directory.
 """ % (template_file)
-            )
-            exit(1)
+        )
+        exit(1)
 
 
 def build_env():
@@ -87,6 +90,7 @@ def build_env():
 
 def update_scripts():
     print("Updating scripts...")
+    create_dirs()
     install_scripts()
 
 
