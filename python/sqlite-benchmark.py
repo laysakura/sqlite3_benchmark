@@ -7,6 +7,33 @@ import SQL
 import ResultsDb
 
 
+def parse_args():
+    import argparse
+
+    # create the parser
+    parser = argparse.ArgumentParser(description="SQLite3 benchmark tool")
+
+    parser.add_argument(
+        "--dbPath",
+        default=None,
+        help="SQLite3 DB path")
+    parser.add_argument(
+        "--dropPageCache",
+        default=0,
+        metavar="0/1",
+        help="Whether to drop page cache before executing each SQL")
+
+    # parse the args and call whatever function was selected
+    args = parser.parse_args()
+    overwrite_config(args)
+
+
+def overwrite_config(args):
+    if args.dbPath is not None:
+        Config.sqlite3DbPath = args.dbPath
+    Config.dropPageCache = bool(args.dropPageCache)
+
+
 def load_db_on_page_cache(db_path):
     Util.sh_cmd_sync("cat %s > /dev/null" % (db_path))
 
@@ -45,6 +72,8 @@ def issue_sqls():
 
 
 def pre_benchmark():
+    parse_args()
+
     ResultsDb.create_if_not_exist()
 
     if not Config.dropPageCache:
