@@ -11,7 +11,12 @@ import shutil
 
 ## Config
 dirs_to_ignore = [".git", "install"]
-template_files = ["README-template.org", "python/Config.py", "python/SQL.py"]
+template_files = [
+    "README-template.org",
+    "python/Config.py",
+    "python/SQL.py",
+    "make/Makefile",
+]
 script_to_update_dirs = ["python", "make"]
 
 
