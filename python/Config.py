@@ -5,7 +5,7 @@ basedir = os.path.dirname(os.path.abspath(__file__)) + "/.."
 
 ## Benchmark targets
 # sqlite3Path = "/path/to/sqlite3"
-# sqlite3DbPath = "/home/nakatani/git/evolution_benchmark/folders.db"
+# sqlite3DbPath = "%s/inputDb/foo.sqlite" % (basedir)
 
 ## Results holder
 resultsDbName = "results.sqlite"
@@ -29,6 +29,11 @@ sleepAfterDropPageCache = 0.5  # exec time varies without sleep?
 ## Note that showing output can slow performance down.
 showStdout = False
 showStderr = True
+
+## Graph settings
+graphXlabel = "SQL"
+graphYlabel = "Time [sec]"
+graphTerminal = "postscript eps enhanced color \"GothicBBB-Medium-UniJIS-UTF8-H\""
 
 ## App specifics.
 ## Write some setting parameters used by SQL.py

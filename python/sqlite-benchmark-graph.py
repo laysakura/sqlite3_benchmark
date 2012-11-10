@@ -6,6 +6,13 @@ import Config
 import Util
 
 
+def get_graph_file_name(var_graph_file_params):
+    ret = ""
+    for key in var_graph_file_params.keys():
+        ret += "%(key)s_%%(%(key)s)s--" % {"key": key}
+    return ret[:len(ret) - len("--")]
+
+
 def get_title_from_var_params(var_params):
     ret = ""
     for key in var_params.keys():
@@ -85,15 +92,18 @@ def main():
 
     g.graphs(
         (Config.resultsDbPath, query, init),
-        # output="graphs/serial_%(M)s",
+        terminal=Config.graphTerminal,
+        output="%s/resultsGraph/%s" % (
+            Config.basedir,
+            get_graph_file_name(var_graph_file_params)),
 
         graph_title=get_title_from_var_params(var_graph_file_params),
         plot_title=get_title_from_var_params(var_plot_params),
         plot_with="histogram fs solid 0.9",
         using="2",
         yrange="[0:]",
-        xlabel=Config.xlabel,
-        ylabel=Config.ylabel,
+        xlabel=Config.graphXlabel,
+        ylabel=Config.graphYlabel,
         vars_dict=vars_dict,
         graph_vars=var_graph_file_params.keys(),
     )

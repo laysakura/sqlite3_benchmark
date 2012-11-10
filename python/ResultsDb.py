@@ -2,6 +2,7 @@ import Config
 from TimeOutputParser import TimeOutputParser
 from datetime import datetime
 import sqlite3
+import os
 
 
 def _get_last_time_result_dict():
@@ -20,7 +21,7 @@ def get_row_dict(sql, sql_no):
 
     row_dict["sql"] = sql
     row_dict["sql_no"] = sql_no
-    row_dict["db"] = Config.sqlite3DbPath
+    row_dict["db"] = os.path.basename(Config.sqlite3DbPath)
     row_dict["drop_page_cache"] = int(Config.dropPageCache)
     row_dict["timestamp"] = datetime.now()
 
