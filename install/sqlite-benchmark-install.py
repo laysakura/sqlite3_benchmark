@@ -12,7 +12,6 @@ import shutil
 ## Config
 dirs_to_ignore = [".git", "install"]
 template_files = [
-    "README-template.org",
     "python/Config.py",
     "python/SQL.py",
     "make/Makefile",
@@ -46,6 +45,12 @@ def install_template_files():
             template_file)
      for template_file in template_files]
 
+    # Only README-template.org should be copied separately
+    # since sqlite3_benchmark has its own README.org
+    shutil.copyfile(
+        sqlite_benchmark_dir + "/" + "README-template.org",
+        "README.org")
+
 
 def install_scripts():
     # find scripts
@@ -76,13 +81,13 @@ def check_env():
     for template_file in template_files:
         if not os.path.exists(template_file):
             n_template_files += 1
-    if n_template_files < len(template_files) / 2:
+    if n_template_files < len(template_files):
         print(
 """
 This directory does not seem to be an sqlite-benchmark directory.
 (Too few template files exist)
 Use this command in empty directory or sqlite-benchmark directory.
-""" % (template_file)
+"""
         )
         exit(1)
 
