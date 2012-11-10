@@ -79,13 +79,13 @@ def install_scripts():
 def check_env():
     n_template_files = 0
     for template_file in template_files:
-        if not os.path.exists(template_file):
+        if os.path.exists(template_file):
             n_template_files += 1
     if n_template_files == 0:
         print(
 """
-This directory does not seem to be an sqlite-benchmark directory.
-(Too few template files exist)
+This directory does not seem to be an sqlite-benchmark powered directory.
+(No template file exists)
 Use this command in empty directory or sqlite-benchmark directory.
 """
         )
