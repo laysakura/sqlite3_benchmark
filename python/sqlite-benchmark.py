@@ -19,6 +19,7 @@ def parse_args():
         help="SQLite3 DB path")
     parser.add_argument(
         "--dropPageCache",
+        type=int,
         default=0,
         metavar="0/1",
         help="Whether to drop page cache before executing each SQL")
