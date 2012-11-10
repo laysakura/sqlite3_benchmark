@@ -10,7 +10,7 @@ trial:=$(shell seq 2)
 
 
 ### Check if finished ###
-output=$(basedir)/make/done/dbPath_$(shell perl -MDigest::MD5 -le "print Digest::MD5::md5_hex(\"$(dbPath)\")")--dropPageCache_$(dropPageCache)--trial_$(trial)
+output=done/dbPath_$(shell perl -MDigest::MD5 -le "print Digest::MD5::md5_hex(\"$(dbPath)\")")--dropPageCache_$(dropPageCache)--trial_$(trial)
 
 
 ### Run Command ###
