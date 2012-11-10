@@ -15,10 +15,11 @@ def _get_last_time_result_dict():
     return parser.get_dict()
 
 
-def get_row_dict(sql):
+def get_row_dict(sql, sql_no):
     row_dict = {}
 
     row_dict["sql"] = sql
+    row_dict["sql_no"] = sql_no
     row_dict["db"] = Config.sqlite3DbPath
     row_dict["drop_page_cache"] = int(Config.dropPageCache)
     row_dict["timestamp"] = datetime.now()
@@ -38,7 +39,7 @@ def pretty_print_row(stdout_str,
 [Benchmark settings]
 timestamp = %(timestamp)s
 dbFile = %(db)s
-sql = %(sql)s
+sql = [SQL%(sql_no)d] %(sql)s
 dropPageCache = %(drop_page_cache)d
 
 [Benchmark results]
@@ -99,6 +100,7 @@ create table if not exists %s (
     timestamp DATETIME NOT NULL,
     db TEXT NOT NULL,
     sql TEXT NOT NULL,
+    sql_no INT NOT NULL,
     drop_page_cache INT NOT NULL,
     real_time REAL NOT NULL,
     user_time REAL NOT NULL,

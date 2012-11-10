@@ -2,21 +2,59 @@
 
 import smart_gnuplotter
 g = smart_gnuplotter.smart_gnuplotter()
-import sys
-import os
 import Config
+import Util
 
 
-def parse_args():
-#     if len(sys.argv) != 2:
-#         print("""
-# ARGS:  TABLE_NAME
+def get_title_from_var_params(var_params):
+    ret = ""
+    for key in var_params.keys():
+        ret += "%(key)s='%%(%(key)s)s' ; " % {"key": key}
+    return ret[:len(ret) - len(" ; ")]
 
-# Here are the candidate tables:
-# """)
-#         os.system("sqlite3 %s '.schema'" % (db_path))
-#         exit(1)
-    return sys.argv[1]
+
+def _get_var_graph_file_param_names():
+    (stdout_str, stderr_str) = Util.sh_cmd_sync(
+        "(cd %s/make ; make show_var_graph_file_params)" %
+        (Config.basedir))
+    return stdout_str.split()
+
+
+def _get_var_plot_param_names():
+    (stdout_str, stderr_str) = Util.sh_cmd_sync(
+        "(cd %s/make ; make show_var_plot_params)" %
+        (Config.basedir))
+    return stdout_str.split()
+
+
+def _get_param_keyvals(param_names):
+    ret = {}
+    for key in param_names:
+        value = g.do_sql(
+            Config.resultsDbPath,
+            "select distinct " + key + " from " + Config.resultsDbTable + ";",
+            single_col=1)
+        ret[key] = value
+    return ret
+
+
+def get_var_graph_file_params():
+    param_names = _get_var_graph_file_param_names()
+    return _get_param_keyvals(param_names)
+
+
+def get_var_plot_params():
+    param_names = _get_var_plot_param_names()
+    return _get_param_keyvals(param_names)
+
+
+def get_where_clause(var_graph_file_params, var_plot_params):
+    ret = ""
+    for g_param in var_graph_file_params:
+        ret += "%(g_param)s='%%(%(g_param)s)s' and " % {"g_param": g_param}
+    for p_param in var_plot_params:
+        ret += "%(p_param)s='%%(%(p_param)s)s' and " % {"p_param": p_param}
+    return ret[:len(ret) - len("and ")]
 
 
 def get_temp_table_sql():
@@ -28,78 +66,37 @@ def get_temp_table_sql():
 
 
 def main():
-    # table_name = parse_args()
-
     ## Temp table definition
     init = get_temp_table_sql()
 
     ## Get appropreate graph variable
-    dbPath_list = g.do_sql(
-        Config.resultsDbPath,
-"""
-select distinct dbPath from %(resultsDbTable)s;
-""" % {
-    "resultsDbTable": Config.resultsDbTable,
-},
-        single_col=1)
-    # n_lines_list = g.do_sql(db_path, "select distinct n_lines from " + table_name, single_col=1)
-    # block_factor_list = g.do_sql(db_path, "select distinct block_factor from " + table_name, single_col=1)
+    var_graph_file_params = get_var_graph_file_params()
+    var_plot_params = get_var_plot_params()
+    vars_dict = var_graph_file_params.copy()
+    vars_dict.update(var_plot_params)
 
     ## Elapsed time
+    w = get_where_clause(var_graph_file_params, var_plot_params)
     query = (
-"""
-select sql, avg(real_time) from %(resultsDbTable)s
-group by sql;
-""" % {
-    "resultsDbTable": Config.resultsDbTable,
-}
+        "select 'SQL'||sql_no, avg(real_time) from " + Config.resultsDbTable +
+        "  where " + w +
+        "  group by sql_no;"
     )
+
     g.graphs(
         (Config.resultsDbPath, query, init),
         # output="graphs/serial_%(M)s",
-        # graph_title="$M=%(M)s$",
-        # graph_title="graph_title",
-        # plot_title="%(typ)s",
-        plot_title="%(dbPath)s",
+
+        graph_title=get_title_from_var_params(var_graph_file_params),
+        plot_title=get_title_from_var_params(var_plot_params),
         plot_with="histogram fs solid 0.9",
         using="2",
         yrange="[0:]",
-        xlabel="Program",
-        ylabel="Performance (GFLOPS)",
-
-        dbPath=dbPath_list,
-        #graph_vars=[ "M"]
-        )
-
-
-    # g.graphs((Config.resultsDbPath, query, init),
-    #          # plot_title="n_lines=%(n_lines)s block_factor=%(block_factor)s",
-    #          plot_with="lp",
-    #          xlabel="# Nodes",
-    #          ylabel="Elapsed Time [sec]",
-    #          yrange="[0:]",
-    #          # n_lines=n_lines_list,
-    #          # block_factor=block_factor_list
-    #          )
-
-
-
-    ## Speedup
-#     query = '''
-# select n_clients, avg(serial_udx_time / udx_time)
-# from ''' + table_name + '''_for_scalability
-# where
-#   n_lines = %(n_lines)s
-# group by
-#   n_clients
-# '''
-#     g.graphs((db_path, query, init),
-#              plot_title="n_lines=%(n_lines)s",
-#              plot_with="lp",
-#              xlabel="# Nodes",
-#              ylabel="Scalability",
-#              overlays=[("x", { "plot_title" : "ideal" })],
-#              n_lines=n_lines_list)
+        xlabel=Config.xlabel,
+        ylabel=Config.ylabel,
+        vars_dict=vars_dict,
+        graph_vars=var_graph_file_params.keys(),
+    )
 
 
 if __name__ == "__main__":

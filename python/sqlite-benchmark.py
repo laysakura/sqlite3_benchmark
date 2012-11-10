@@ -61,13 +61,13 @@ def get_sql_cmdline(sql):
 
 def issue_sqls():
     sqls = SQL.get_sqls()
-    for sql in sqls:
+    for sql_no, sql in enumerate(sqls):
         drop_page_cache_if_necessary()
 
         cmd = get_sql_cmdline(sql)
         (stdout_str, stderr_str) = Util.sh_cmd_sync(cmd)
 
-        row_dict = ResultsDb.get_row_dict(sql)
+        row_dict = ResultsDb.get_row_dict(sql, sql_no)
         ResultsDb.pretty_print_row(stdout_str, stderr_str, row_dict)
         ResultsDb.insert(row_dict)
 
