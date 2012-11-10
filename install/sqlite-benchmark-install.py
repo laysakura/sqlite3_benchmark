@@ -81,7 +81,7 @@ def check_env():
     for template_file in template_files:
         if not os.path.exists(template_file):
             n_template_files += 1
-    if n_template_files < len(template_files):
+    if n_template_files == 0:
         print(
 """
 This directory does not seem to be an sqlite-benchmark directory.
