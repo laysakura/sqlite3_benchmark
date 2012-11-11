@@ -22,14 +22,14 @@ def get_title_from_var_params(var_params):
 
 def _get_var_graph_file_param_names():
     (stdout_str, stderr_str) = Util.sh_cmd_sync(
-        "(cd %s/make ; make show_var_graph_file_params)" %
+        "(cd %s/make ; make --quiet show_var_graph_file_params)" %
         (Config.basedir))
     return stdout_str.split()
 
 
 def _get_var_plot_param_names():
     (stdout_str, stderr_str) = Util.sh_cmd_sync(
-        "(cd %s/make ; make show_var_plot_params)" %
+        "(cd %s/make ; make --quiet show_var_plot_params)" %
         (Config.basedir))
     return stdout_str.split()
 

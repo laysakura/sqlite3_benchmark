@@ -8,8 +8,7 @@ basedir = os.path.dirname(os.path.abspath(__file__)) + "/.."
 # sqlite3DbPath = "%s/inputDb/foo.sqlite" % (basedir)
 
 ## Results holder
-resultsDbName = "results.sqlite"
-resultsDbPath = "%s/resultsDb/%s" % (basedir, resultsDbName)
+resultsDbPath = "%s/resultsDb/results.sqlite" % (basedir)
 resultsDbTable = "results"
 
 ## Benchmark timer
