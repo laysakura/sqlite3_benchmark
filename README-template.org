@@ -1,0 +1,8 @@
+* EDIT THIS README YOURSELF!
+  This file is created from sqlite-benchmark-install.py.
+  Freely edit this file to explain your own benchmark.
+
+* Files to modify
+  - make/Makefile (Parameter sweep)
+  - python/Config.py (App specific settings)
+  - python/SQL.py (SQLs to evaluate)
