@@ -87,7 +87,7 @@ def plot(var_graph_file_params, var_plot_params):
     vars_dict.update(var_plot_params)
     g.graphs(
         (Config.resultsDbPath, query, init),
-        # terminal=Config.graphTerminal,
+        terminal=Config.graphTerminal,
         output="%s/resultsGraph/%s" % (
             Config.basedir,
             get_graph_file_name(var_graph_file_params)),
