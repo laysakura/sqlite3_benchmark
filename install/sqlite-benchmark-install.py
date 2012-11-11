@@ -40,14 +40,14 @@ def create_dirs():
 
 
 def install_template_files():
-    [shutil.copyfile(
+    [shutil.copy2(
             sqlite_benchmark_dir + "/" + template_file,
             template_file)
      for template_file in template_files]
 
     # Only README-template.org should be copied separately
     # since sqlite3_benchmark has its own README.org
-    shutil.copyfile(
+    shutil.copy2(
         sqlite_benchmark_dir + "/" + "README-template.org",
         "README.org")
 
@@ -70,7 +70,7 @@ def install_scripts():
             scripts_to_install.append(commited_script)
 
     # copy
-    [shutil.copyfile(
+    [shutil.copy2(
             sqlite_benchmark_dir + "/" + script,
             script)
      for script in scripts_to_install]
