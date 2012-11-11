@@ -72,41 +72,51 @@ def get_temp_table_sql():
     )
 
 
-def main():
+def plot(var_graph_file_params, var_plot_params):
     ## Temp table definition
     init = get_temp_table_sql()
 
-    ## Get appropreate graph variable
-    var_graph_file_params = get_var_graph_file_params()
-    var_plot_params = get_var_plot_params()
-    vars_dict = var_graph_file_params.copy()
-    vars_dict.update(var_plot_params)
-
-    ## Elapsed time
     w = get_where_clause(var_graph_file_params, var_plot_params)
     query = (
-        "select 'SQL'||sql_no, avg(real_time) from " + Config.resultsDbTable +
+        "select 'SQL'||sql_no, avg(real_time), cimin(real_time, 0.05), cimax(real_time, 0.05)" +
+        "  from " + Config.resultsDbTable +
         "  where " + w +
         "  group by sql_no;"
     )
-
+    vars_dict = var_graph_file_params.copy()
+    vars_dict.update(var_plot_params)
     g.graphs(
         (Config.resultsDbPath, query, init),
-        terminal=Config.graphTerminal,
+        # terminal=Config.graphTerminal,
         output="%s/resultsGraph/%s" % (
             Config.basedir,
             get_graph_file_name(var_graph_file_params)),
 
+        graph_attr="""
+fontsize = 12
+set style fill solid 1.00 border 0
+set style histogram errorbars gap 2 lw 1
+set style data histogram
+set grid ytics
+""",
         graph_title=get_title_from_var_params(var_graph_file_params),
         plot_title=get_title_from_var_params(var_plot_params),
-        plot_with="histogram fs solid 0.9",
-        using="2",
+        using="2:3:xtic(1)",
         yrange="[0:]",
         xlabel=Config.graphXlabel,
         ylabel=Config.graphYlabel,
         vars_dict=vars_dict,
         graph_vars=var_graph_file_params.keys(),
     )
+
+
+def main():
+    ## Get appropreate graph variable
+    var_graph_file_params = get_var_graph_file_params()
+    var_plot_params = get_var_plot_params()
+
+    ## Elapsed time
+    plot(var_graph_file_params, var_plot_params)
 
 
 if __name__ == "__main__":

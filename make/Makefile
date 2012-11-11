@@ -8,7 +8,7 @@ parameters=$(var_graph_file_params) $(var_plot_params) trial
 
 db:=foo.sqlite bar.sqlite  # Do not include fullpath as paramter values
 drop_page_cache:=0 1
-trial:=$(shell seq 2)
+trial:=$(shell seq 2)  # Use more than 1 when use error bar
 
 
 ### Check if finished ###
