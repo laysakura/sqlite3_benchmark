@@ -78,7 +78,7 @@ def plot(var_graph_file_params, var_plot_params):
 
     w = get_where_clause(var_graph_file_params, var_plot_params)
     query = (
-        "select 'SQL'||sql_no, avg(real_time), cimin(real_time, 0.05), cimax(real_time, 0.05)" +
+        "select 'SQL'||sql_no, avg(real_time), stdev(real_time)" +
         "  from " + Config.resultsDbTable +
         "  where " + w +
         "  group by sql_no;"
@@ -93,15 +93,15 @@ def plot(var_graph_file_params, var_plot_params):
             get_graph_file_name(var_graph_file_params)),
 
         graph_attr="""
-fontsize = 12
 set style fill solid 1.00 border 0
 set style histogram errorbars gap 2 lw 1
 set style data histogram
+set xtics rotate by -45
 set grid ytics
 """,
         graph_title=get_title_from_var_params(var_graph_file_params),
         plot_title=get_title_from_var_params(var_plot_params),
-        using="2:3:xtic(1)",
+        using="2:3",
         yrange="[0:]",
         xlabel=Config.graphXlabel,
         ylabel=Config.graphYlabel,

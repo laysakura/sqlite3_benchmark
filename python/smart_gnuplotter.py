@@ -362,7 +362,7 @@ class smart_gnuplotter:
         self.default_graph_vars = []
         # 
         self.default_functions = []
-        self.default_aggregates = [ ("cimin", 2, cimin), ("cimax", 2, cimax) ]
+        self.default_aggregates = [ ("cimin", 2, cimin), ("cimax", 2, cimax), ("stdev", 1, Stdev)]
         self.default_collations = []
         self.gpl_file_counter = 0
         self.all_graphs = []
@@ -1168,6 +1168,19 @@ class cimin(confidence_interval):
     def _finalize_(self):
         mu,dm = self._confidence_interval(self.X, self.significance_level)
         return mu - dm
+
+class Stdev:
+    def __init__(self):
+        self.samples = []
+
+    def step(self, sample):
+        self.samples.append(sample)
+
+    def finalize(self):
+        n = len(self.samples)
+        mean = sum(self.samples) / n
+        stdev = math.sqrt(sum([math.pow(s - mean, 2) for s in self.samples]) / n)
+        return stdev
 
 def _main():
     g = smart_gnuplotter()
