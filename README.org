@@ -1,8 +1,27 @@
 * What's this?
-  
+  [[http://github.com/laysakura/sqlite3_benchmark/raw/master/doc/results-vacuum.png]]
 
+  This repository is a template for SQLite benchmark with any SQL.
+  You can evaluate many queries at the same time with various parameters like different database files or whether to drop page cache.
+
+* Features
+  - *Template system*: You can make many benchmark environments using this repository as a template.
+    You can use installation tool to make an environment quickly.
+  - *Graph*: It's easy to get various graphs.  You can set /graph-parameter/ and /plot-parameter/
+    to specify parameters to split graphs or plots.
+  - *Easy configuration*: You can write experimental environments, SQLs, and parameters as you like.
+    Only you have to do is to modify these 3 files.
+    - python/SQL.py
+    - python/Config.py
+    - make/Makefile
 
 * Usage
   1. Add install/sqlite-benchmark-install.py into your PATH
   2. Hit sqlite-benchmark-install.py command in an empty directory
      in which you want to construct benchmark environment.
+  3. Modify these 3 files to fit your experimental environment.
+     - python/SQL.py
+     - python/Config.py
+     - make/Makefile
+  4. Just hit `make' command in make/ directory.
+  5. You get graphs in resultsGraph/ directory.
