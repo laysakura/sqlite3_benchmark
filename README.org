@@ -14,14 +14,35 @@
     - python/SQL.py
     - python/Config.py
     - make/Makefile
+  - *Powerful SQL description*: SQLs to evaluate should be written in Python string object.
+    You can use convenient predefined function to get many SQLs at a time.
+    See the example below:
+    #+BEGIN_SRC python
+Util.get_str_allpairs(
+    "SELECT COUNT (*) FROM '%s' WHERE junk = %d;",
+    [["INBOX", "Trash", "Draft"], [0, 1]]
+)
+# Results in:
+[
+    "SELECT COUNT (*) FROM 'INBOX' WHERE junk = 0;",
+    "SELECT COUNT (*) FROM 'INBOX' WHERE junk = 1;",
+    "SELECT COUNT (*) FROM 'Trash' WHERE junk = 0;",
+    "SELECT COUNT (*) FROM 'Trash' WHERE junk = 1;",
+    "SELECT COUNT (*) FROM 'Draft' WHERE junk = 0;",
+    "SELECT COUNT (*) FROM 'Draft' WHERE junk = 1;",
+]
+    #+END_SRC
 
 * Usage
   1. Add install/sqlite-benchmark-install.py into your PATH
   2. Hit sqlite-benchmark-install.py command in an empty directory
      in which you want to construct benchmark environment.
   3. Modify these 3 files to fit your experimental environment.
-     - python/SQL.py
-     - python/Config.py
-     - make/Makefile
+     python/SQL.py , python/Config.py , and make/Makefile
   4. Just hit `make' command in make/ directory.
   5. You get graphs in resultsGraph/ directory.
+
+* Thanks
+  I used these scripts with a little modifications.
+  - http://code.google.com/p/smart-gnuplotter/
+  - http://taurara.blog.fc2.com/blog-entry-1.html
