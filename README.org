@@ -1,3 +1,7 @@
+* What's this?
+  
+
+
 * Usage
   1. Add install/sqlite-benchmark-install.py into your PATH
   2. Hit sqlite-benchmark-install.py command in an empty directory
